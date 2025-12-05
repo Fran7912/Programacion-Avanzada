@@ -1,0 +1,41 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %} 
+
+{% block title %}
+Sistema de Reclamos
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<h1>Sistema de Reclamos FIUNER</h1>
+		Bienvenido {{usuario}}
+		
+		{% with messages = get_flashed_messages() %}
+
+		{% if messages %}
+
+			{% for message in messages %}
+
+				{{message}}
+
+			{% endfor %}
+
+		{% endif %}
+
+	{% endwith %}		
+		
+		<div class="row">
+			<div class="col-lg-4">
+
+					<a href="{{ url_for('formulario_reclamo') }}" class="btn btn-primary btn-block btn-large">Crear Reclamo</a>
+					<a href="{{ url_for('mostrar_reclamos') }}" class="btn btn-primary btn-block btn-large">Mostrar Reclamos</a>
+                    <a href="{{ url_for('mis_reclamos') }}" class="btn btn-primary btn-block btn-large">Mis Reclamos</a>
+					<a href="{{ url_for('cerrar_sesion') }}" class="btn btn-primary btn-block btn-large">Cerrar sesion</a>
+
+			</div>	
+		</div>
+	</div>
+{% endblock %}
+
+

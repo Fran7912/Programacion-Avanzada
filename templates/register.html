@@ -1,0 +1,38 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %} 
+
+
+{% with messages = get_flashed_messages() %}
+
+{% if messages %}
+
+    {% for message in messages %}
+
+        {{message}}
+
+    {% endfor %}
+
+{% endif %}
+
+{% endwith %}
+
+
+{% block title %}
+Sistema de Reclamos
+{% endblock %}
+
+{% block body %}
+	<div class="container mx-auto my-4">
+		<h1>Sistema de Reclamos FIUNER</h1>
+		<h2>Registrarse</h2>
+		
+		<div class="row">
+			<div class="col-lg-6">
+				<!--hace un post a la misma ruta donde se crea el formulario-->
+				{{ wtf.quick_form(form, novalidate=True) }}			
+			</div>		
+		</div>
+		
+	</div>
+{% endblock %}
+

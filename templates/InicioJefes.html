@@ -1,0 +1,24 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %} 
+
+{% block title %}
+Sistema de Reclamos
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<h1>Sistema de Reclamos FIUNER</h1>
+		
+		<div class="row">
+			<div class="col-lg-4">
+
+					<a href="{{ url_for('analitica') }}" class="btn btn-primary btn-block btn-large">AnalÍtica</a>
+					<a href="{{ url_for('manejar_reclamos') }}" class="btn btn-primary btn-block btn-large">Manejar Reclamos</a>
+                    <a href="{{ url_for('ayuda') }}" class="btn btn-primary btn-block btn-large">Ayuda</a>
+                    <a href="{{ url_for('cerrar_sesion') }}" class="btn btn-primary btn-block btn-large">Cerrar Sesión</a>
+
+			</div>	
+		</div>
+	</div>
+{% endblock %}

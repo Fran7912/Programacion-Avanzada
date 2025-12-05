@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe de reclamos de {{departamento}}</title>
+</head>
+<body>
+    <h1>Reclamos de {{ departamento }}</h1>
+    <img src="/static/diagramas/Diagrama Circular.png" width="800">
+
+    <p> Las palabras más repetidas se encuentran en la siguiente nube de palabras: </p>
+    <img src="/static/diagramas/Nube de Palabras.png" width="800">
+    <p>A continuación se enuncian los reclamos</p>
+    {% for reclamo in reclamos %}
+    <p><strong>{{ reclamo.titulo }}:&nbsp;</strong>{{ reclamo.descripcion }}</p>
+    <ul>
+    <li><strong>Estado:&nbsp; </strong> {{ reclamo.estado }}</li>
+    <li><strong>Adheridos:&nbsp; </strong>{{ reclamo.usuarios_adheridos }}</li>
+    <li><strong>Fecha:&nbsp; </strong>{{ reclamo.fecha }}</li>    
+</ul>
+    {% endfor %}
+</body>
+</html>

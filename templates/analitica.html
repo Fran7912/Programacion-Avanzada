@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+<!-- {% extends 'bootstrap/base.html' %} -->
+
+
+
+<head>
+    <style>
+        .dashboard {
+            display: flex;
+            justify-content: center; /* Centra las imágenes horizontalmente */
+            align-items: center; /* Alinea verticalmente */
+            gap: 1px; /* Espacio entre imágenes */
+            width: 100%; /* Asegura que el contenedor use todo el ancho */
+            flex-wrap: wrap; /* Permite que las imágenes bajen si no caben */
+        }
+        .dashboard img {
+            width: 60%; /* Asegura que las imágenes tengan espacio */
+            max-width: 200px; /* Evita que sean demasiado grandes */
+            height: auto; /* Mantiene la proporción */
+        }
+        
+        .buttons{
+            text-align: center;
+            margin-top: 20px
+        }
+    </style>
+</head>
+
+<!-- {% block body %} -->
+
+<body>
+    <div class="dashboard">
+        <img src="{{ url_for('static', filename='diagramas/Diagrama Circular.svg') }}" alt="Imagen 1">
+        <img src="{{ url_for('static', filename='diagramas/Nube de Palabras.png') }}" alt="Imagen 2">
+    </div>
+
+    <div class="buttons">
+        <a href="/generar_informe/pdf" class="btn btn-primary btn-block btn-large">Generar Informe pdf</a>
+        <br></br>
+        <a href="/generar_informe/html" class="btn btn-primary btn-block btn-large">Generar Informe html</a>
+        <br></br>
+        <a href="/" class="btn btn-primary btn-block btn-large">Menú Principal</a>
+    </div>
+
+
+
+
+
+</body>
+</html>
+<!-- {% endblock %}  -->

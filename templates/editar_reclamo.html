@@ -1,0 +1,59 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %} 
+
+
+{% with messages = get_flashed_messages() %}
+
+{% if messages %}
+
+    {% for message in messages %}
+
+        {{message}}
+
+    {% endfor %}
+
+{% endif %}
+
+{% endwith %}
+
+
+{% block title %}
+Sistema de Reclamos
+{% endblock %}
+
+{% block body %}
+	<div class="container mx-auto my-4">
+		<h1>Sistema de Reclamos FIUNER</h1>
+		<h2>Editar Reclamo</h2>
+		
+        <h5>Título:{{reclamo.titulo}}</h5>
+        <h5></h5>
+        <h5>Descripción:{{reclamo.descripcion}}</h5>
+        <h5></h5>
+        <i>Fecha:{{reclamo.fecha}}</h4>
+        <h5></h5>
+        <h5>Autor:{{reclamo.autor}}</h5>
+        <h5></h5>
+        <h5>Adheridos:</h5> 
+        {% for adherido in reclamo.usuarios_adheridos %}
+        <h5>{{adherido.nombre_usuario}}</h5>
+        {% endfor %}
+        <h5>Departamento:{{reclamo.departamento}}</h5>
+        <h5></h5>
+        {% if reclamo.imagen %}
+        <img src="/static/uploads/images/{{reclamo.imagen}}" width="400">
+        {% endif %}
+
+
+		<div class="row">
+			<div class="col-lg-6">
+				<!--hace un post a la misma ruta donde se crea el formulario-->
+				{{ wtf.quick_form(form, novalidate=True) }}			
+			</div>		
+		</div>
+		
+	</div>
+
+    <a href="/" class="btn btn-primary btn-block btn-large">Menú Principal</a>
+{% endblock %}
+

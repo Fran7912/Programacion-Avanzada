@@ -1,0 +1,56 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %} 
+
+{% block title %}
+Sistema de Reclamos
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<h1>Sistema de Reclamos FIUNER</h1>
+		
+		{% with messages = get_flashed_messages() %}
+
+			{% if messages %}
+
+    			{% for message in messages %}
+
+        			{{message}}
+
+    			{% endfor %}
+
+			{% endif %}
+
+		{% endwith %}		
+
+
+        {% for reclamo in reclamos %}
+        
+
+        <h5>Título:{{reclamo.titulo}}</h5>
+        <h5></h5>
+        <h5>Descripción:{{reclamo.descripcion}}</h5>
+        <h5></h5>
+        <i>Fecha:{{reclamo.fecha}}</h4>
+        <h5></h5>
+        <h5>Autor:{{reclamo.autor}}</h5>
+        <h5></h5>
+        <h5>Adheridos:</h5> 
+        {% for adherido in reclamo.usuarios_adheridos %}
+        <h5>{{adherido.nombre_usuario}}</h5>
+        {% endfor %}
+        <h5>Departamento:{{reclamo.departamento}}</h5>
+        <h5></h5>
+        {% if reclamo.imagen %}
+        <img src="/static/uploads/images/{{reclamo.imagen}}" width="400">
+        {% endif %}
+        <h5></h5>
+        <h5>Estado: {{reclamo.estado}}</h5>
+        <h5></h5>
+        <a href="/editar/{{reclamo.id}}" class="btn btn-primary btn-block btn-large">Editar</a>
+        
+        {% endfor %}
+
+        <a href="/" class="btn btn-primary btn-block btn-large">Menú Principal</a>
+{% endblock %}
