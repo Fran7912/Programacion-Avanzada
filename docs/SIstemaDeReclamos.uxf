@@ -54,12 +54,12 @@ __entrenar_clasificador(self)
 +clasificar(self, texto)
 </panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>210</x><y>360</y><w>210</w><h>190</h></coordinates><panel_attributes>Usuario (A)
 --
-- ID: str
-+Nombre: str
-+Apellido: str
-+email: str
-+NombreUsuario: str
-+Claustro: str
+- _id: int
+- _nombre_usuario: str
+-_email: str
+-_apellido: str
+-_nombre:str
+-_reclamos_seguidos:list
 --
 </panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>630</y><w>210</w><h>60</h></coordinates><panel_attributes>UsuarioFinal
 --

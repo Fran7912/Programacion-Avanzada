@@ -1,14 +1,164 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sistema de Gestión de Reclamos - Inicio</title>
+    <style>
+        :root{
+            --bg:#f5f7fb; --card:#ffffff; --primary:#0d6efd; --muted:#6c757d;
+            --accent:#0b5ed7; --shadow: 0 6px 18px rgba(13,110,253,0.08);
+            font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        *{box-sizing:border-box}
+        body{margin:0;background:var(--bg);color:#222}
+        header{
+            background:linear-gradient(90deg,var(--primary),var(--accent));
+            color:#fff;padding:20px 24px;
+        }
+        .container{max-width:1100px;margin:28px auto;padding:0 20px}
+        .top{
+            display:flex;align-items:center;justify-content:space-between;gap:16px;
+        }
+        .brand{display:flex;align-items:center;gap:12px}
+        .logo{
+            width:48px;height:48px;border-radius:8px;background:rgba(255,255,255,0.12);
+            display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;
+        }
+        nav ul{list-style:none;margin:0;padding:0;display:flex;gap:12px}
+        nav a{
+            color:rgba(255,255,255,0.95);text-decoration:none;padding:8px 12px;border-radius:8px;
+        }
+        nav a:hover{background:rgba(255,255,255,0.08)}
+        main{margin-top:18px}
+        .hero{
+            background:var(--card);padding:22px;border-radius:12px;box-shadow:var(--shadow);
+            display:flex;flex-direction:column;gap:12px;
+        }
+        .hero h1{margin:0;font-size:1.5rem}
+        .hero p{margin:0;color:var(--muted)}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px}
+        .card{
+            background:var(--card);padding:16px;border-radius:10px;box-shadow:var(--shadow);
+            border:1px solid rgba(15,23,42,0.03);
+        }
+        .card h3{margin:0 0 8px 0;font-size:1.05rem}
+        .card p{margin:0;color:var(--muted);font-size:0.95rem}
+        .actions{display:flex;gap:10px;margin-top:14px}
+        .btn{
+            display:inline-block;padding:8px 12px;border-radius:8px;text-decoration:none;color:#fff;
+            background:var(--primary);border:none;cursor:pointer;font-weight:600;
+        }
+        .btn.secondary{background:#6c757d}
+        footer{margin-top:22px;padding:12px 0;color:var(--muted);font-size:0.9rem;text-align:center}
+        @media (min-width:900px){
+            .hero{flex-direction:row;align-items:center;justify-content:space-between}
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenido al Sistema de Gestión de Reclamos</h1>
-    <p>Seleccione una opción del menú para continuar.</p>
-    
-    
+    <header>
+        <div class="container top">
+            <div class="brand">
+                <div class="logo">SGR</div>
+                <div>
+                    <div style="font-weight:700">Sistema de Gestión de Reclamos</div>
+                    <div style="font-size:0.85rem;opacity:0.9">Panel de inicio</div>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" data-nav="inicio">Inicio</a></li>
+                    <li><a href="#" data-nav="crear">Crear reclamo</a></li>
+                    <li><a href="#" data-nav="ver">Ver reclamos</a></li>
+                    <li><a href="#" data-nav="estadisticas">Estadísticas</a></li>
+                    <li><a href="#" data-nav="perfil">Perfil</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <div>
+                <h1>Bienvenido al Sistema de Gestión de Reclamos</h1>
+                <p>Seleccione una opción del menú o comience creando un nuevo reclamo.</p>
+                <div class="actions">
+                    <button class="btn" id="btn-crear">Crear reclamo</button>
+                    <a href="#" class="btn secondary" id="btn-ver">Ver reclamos</a>
+                </div>
+            </div>
+            <div style="min-width:220px;text-align:right;color:var(--muted)">
+                <div style="font-size:0.95rem;font-weight:600">Estado rápido</div>
+                <div style="margin-top:8px">Reclamos abiertos: <strong id="open-count">--</strong></div>
+                <div style="margin-top:6px">Reclamos cerrados: <strong id="closed-count">--</strong></div>
+            </div>
+        </section>
+
+        <section class="grid" aria-label="Accesos rápidos">
+            <div class="card">
+                <h3>Nuevo reclamo</h3>
+                <p>Registrar un reclamo con detalles y adjuntar documentación relevante.</p>
+                <div style="margin-top:12px">
+                    <button class="btn" onclick="goTo('crear')">Crear</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Gestión de reclamos</h3>
+                <p>Ver, filtrar y actualizar el estado de los reclamos existentes.</p>
+                <div style="margin-top:12px">
+                    <button class="btn secondary" onclick="goTo('ver')">Ir a reclamos</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Reportes</h3>
+                <p>Generar informes y estadísticas sobre tiempos de respuesta y tipos de reclamo.</p>
+                <div style="margin-top:12px">
+                    <button class="btn" onclick="goTo('estadisticas')">Ver reportes</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Configuración</h3>
+                <p>Administrar usuarios, permisos y parámetros del sistema.</p>
+                <div style="margin-top:12px">
+                    <button class="btn secondary" onclick="goTo('perfil')">Configuración</button>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            &copy; <span id="year"></span> Sistema de Gestión de Reclamos — Todos los derechos reservados.
+        </footer>
+    </main>
+
+    <script>
+        // Rutas simuladas; reemplazar por rutas reales de la aplicación
+        const routes = {
+            inicio: '#',
+            crear: '/reclamos/crear',
+            ver: '/reclamos',
+            estadisticas: '/reportes',
+            perfil: '/perfil'
+        };
+
+        function goTo(route){
+            const url = routes[route] || '#';
+            // En servidor real, usar location.href = url
+            console.log('Navegar a:', url);
+            alert('Navegación: ' + url);
+        }
+
+        document.getElementById('btn-crear').addEventListener('click', ()=>goTo('crear'));
+        document.getElementById('btn-ver').addEventListener('click', ()=>goTo('ver'));
+
+        // Datos de ejemplo para indicadores rápidos (reemplazar con fetch a la API)
+        document.getElementById('open-count').textContent = 12;
+        document.getElementById('closed-count').textContent = 34;
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
