@@ -1,9 +1,8 @@
 
-from modules.preprocesamiento import TextVectorizer         #modules
-from modules.preprocesamiento import ProcesadorArchivo    #modules
+from modules.preprocesamiento import TextVectorizer         
+from modules.preprocesamiento import ProcesadorArchivo    
 import pickle
 import numpy as np
-from modules.preprocesamiento import TextVectorizer   #modules
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
@@ -12,8 +11,7 @@ from sklearn.metrics import accuracy_score
 
 
 class Clasificador():
-    """
-    """
+
     def __init__(self, X=np.array, y=np.array, escalado=True):       
         self.X= X 
         self.y= y

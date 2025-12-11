@@ -1,23 +1,33 @@
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, timezone
+from modules.config import db
+from sqlalchemy import Column, Integer, String, TIMESTAMP, Float, ForeignKey, Text, DateTime
+from flask_login import UserMixin, logout_user
+from sqlalchemy.orm import relationship
 
-db = SQLAlchemy()
 
-adhesiones = db.Table('adhesiones',
-    db.Column('usuario_id', db.Integer, db.ForeignKey('usuario.id')),
-    db.Column('reclamo_id', db.Integer, db.ForeignKey('reclamo.id'))
-)
+asociacion_usuarios_reclamos=db.Table('adheridos',
+                                      Column('id_usuario', Integer, ForeignKey('usuarios.id')),
+                                      Column('id_reclamo', Integer, ForeignKey('reclamos.id')))
 
-class Usuario(db.Model):
-    _id = db.Column(db.Integer, primary_key=True)
-   
-    _nombre = db.Column(db.String(50), nullable=False)
-    _apellido = db.Column(db.String(50), nullable=False)
-    _email = db.Column(db.String(120), unique=True, nullable=False) 
-    _nombre_usuario = db.Column(db.String(50), unique=True, nullable=False) 
-    _contraseña = db.Column(db.String(200), nullable=False)
+class Usuario(UserMixin, db.Model):
+    __tablename__ = 'usuarios'
+
+    _id = Column('id', Integer(), primary_key=True)
+
+    _email = Column('email', String(100), unique=True)
+    _nombre_usuario = Column('nombre_usuario', String(100), unique=True)
+    _contraseña = Column('contraseña', String(100))
+
+    _nombre = Column('nombre', String(100))
+    _apellido = Column('apellido', String(100))
     
-    rol = db.Column(db.String(20)) # 'final', 'jefe', 'secretario' (Para manejar la herencia)
+    _reclamos_seguidos = relationship("Reclamo", secondary=asociacion_usuarios_reclamos, backref="usuarios")
+
+    def __init__(self, Nombre, Apellido, email, nombre_usuario, contraseña):
+        self._email = email
+        self._nombre_usuario = nombre_usuario
+        self._contraseña=contraseña
+        self._nombre=Nombre
+        self._apellido=Apellido
 
 
     @property
@@ -46,19 +56,120 @@ class Usuario(db.Model):
     def apellido(self):
         return self._apellido
 
+
+
 class Reclamo(db.Model):
+    __tablename__='reclamos'
 
-    _id = db.Column(db.Integer, primary_key=True)
+    _id = Column('id', Integer(), primary_key=True)
 
-    _titulo = db.Column(db.String(100), nullable=False)
-    _descripcion = db.Column(db.Text, nullable=False) 
-    _estado = db.Column(db.String(20), default='pendiente') 
-    _fecha = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
-    _imagen = db.Column(db.String(120)) 
+    _autor=Column('autor', Integer())
+    _departamento = Column('departamento', String(100))
+
+    _fecha = Column('fecha', String(30)) #verificar si funciona así
+    _estado = Column('estado', String(100))
+    _titulo=Column('titulo', String (100))
+    _descripcion = Column('descripcion', String(10000))
+
+    _imagen= Column('imagen', String(100))
+    #imagen = db.relationship('Imagen', secondary=imagen_reclamo, backref='reclamo')
+
+
+    def __init__(self,autor, departamento, fecha, estado, titulo, descripcion):
+        
+        self._autor = autor
+        self._departamento = departamento
+        self._fecha = fecha
+        self._estado = estado
+        self._titulo = titulo
+        self._descripcion = descripcion
+
+    def __str__(self): 
+        reclamo = f"Titulo: {self.Titulo} \nDescripción: {self.Descripcion}"
+        return reclamo
     
-    # Claves foráneas
-    departamento_id = db.Column(db.Integer, nullable=False) 
-    autor_id = db.Column(db.Integer, db.ForeignKey('usuario.id'))
+
+
+    @property
+    def id(self):
+        return self._id
     
-    # Relación con la tabla de adhesiones
-    adherentes = db.relationship('Usuario', secondary=adhesiones, backref='reclamos_adheridos')
+    @property
+    def autor(self):
+        return self._autor
+
+    @property
+    def departamento(self):
+        return self._departamento
+
+    @property
+    def fecha(self):
+        return self._fecha
+
+    @property
+    def estado(self):
+        return self._estado
+    
+    @property
+    def titulo(self):
+        return self._titulo
+
+    @property
+    def descripcion(self):
+        return self._descripcion
+
+    
+    @property
+    def imagen(self):
+        return self._imagen
+
+    
+    @imagen.setter
+    def imagen(self, imagen):
+        self._imagen = imagen
+
+
+    @estado.setter
+    def estado(self, nuevo_estado):
+        if nuevo_estado in ['pendiente', 'inválido', 'en proceso', 'resuelto']:
+            self._estado = nuevo_estado
+        else:
+            raise Exception
+
+    @departamento.setter
+    def departamento(self, nuevo_departamento):
+        if nuevo_departamento in ['secretaría técnica','soporte informático','maestranza']:
+            self._departamento = nuevo_departamento
+        else:
+            raise Exception
+
+
+
+
+
+    """@property
+    def estado(self):
+        return self.__Estado    
+    @estado.setter 
+    def cambiar_estado (self, nuevo_estado):
+        self.__Estado = nuevo_estado
+         
+        def mostrar(self):
+            Genera un string que contenga el título y la descripción
+        
+            reclamo = self.Titulo+"\n"+self.Descripcion
+            return Reclamo"""
+        
+    def agregar_imagen(self, imagen):
+        """Agrega al reclamo la imagen, si esta fue ingresada en el formulario"""
+
+        #self.imagen_id.append(imagen)
+        pass
+
+        
+
+    def cambiar_tipo(self, tipo):
+        """Cambia el tipo de reclamo"""
+        self.tipo = tipo
+
+
