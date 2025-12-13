@@ -60,7 +60,7 @@ class ProcesadorArchivo():
   
   def __init__(self, direccion,):
     
-    with open("./modules"+direccion,'r', encoding='utf-8') as f:
+    with open("./modules/"+direccion,'r', encoding='utf-8') as f:
       datos_entrenamiento = json.load(f)
 
     textos_entrenamiento = []

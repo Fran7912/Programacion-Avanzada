@@ -88,37 +88,27 @@ class Reclamo(db.Model):
         reclamo = f"Titulo: {self.Titulo} \nDescripción: {self.Descripcion}"
         return reclamo
     
-
-
     @property
     def id(self):
         return self._id
-    
     @property
     def autor(self):
         return self._autor
-
     @property
     def departamento(self):
         return self._departamento
-
     @property
     def fecha(self):
         return self._fecha
-
     @property
     def estado(self):
         return self._estado
-    
     @property
     def titulo(self):
         return self._titulo
-
     @property
     def descripcion(self):
         return self._descripcion
-
-    
     @property
     def imagen(self):
         return self._imagen
@@ -144,32 +134,5 @@ class Reclamo(db.Model):
             raise Exception
 
 
-
-
-
-    """@property
-    def estado(self):
-        return self.__Estado    
-    @estado.setter 
-    def cambiar_estado (self, nuevo_estado):
-        self.__Estado = nuevo_estado
-         
-        def mostrar(self):
-            Genera un string que contenga el título y la descripción
-        
-            reclamo = self.Titulo+"\n"+self.Descripcion
-            return Reclamo"""
-        
-    def agregar_imagen(self, imagen):
-        """Agrega al reclamo la imagen, si esta fue ingresada en el formulario"""
-
-        #self.imagen_id.append(imagen)
-        pass
-
-        
-
-    def cambiar_tipo(self, tipo):
-        """Cambia el tipo de reclamo"""
-        self.tipo = tipo
 
 
