@@ -1,164 +1,238 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Sistema de Gestión de Reclamos - Inicio</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Reclamos - UNER</title>
     <style>
-        :root{
-            --bg:#f5f7fb; --card:#ffffff; --primary:#0d6efd; --muted:#6c757d;
-            --accent:#0b5ed7; --shadow: 0 6px 18px rgba(13,110,253,0.08);
-            font-family: Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        *{box-sizing:border-box}
-        body{margin:0;background:var(--bg);color:#222}
-        header{
-            background:linear-gradient(90deg,var(--primary),var(--accent));
-            color:#fff;padding:20px 24px;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2980b9 0%, #1e5a8e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
-        .container{max-width:1100px;margin:28px auto;padding:0 20px}
-        .top{
-            display:flex;align-items:center;justify-content:space-between;gap:16px;
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 550px;
+            width: 100%;
+            padding: 50px 40px;
+            text-align: center;
         }
-        .brand{display:flex;align-items:center;gap:12px}
-        .logo{
-            width:48px;height:48px;border-radius:8px;background:rgba(255,255,255,0.12);
-            display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;
+
+        .logo-container {
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        nav ul{list-style:none;margin:0;padding:0;display:flex;gap:12px}
-        nav a{
-            color:rgba(255,255,255,0.95);text-decoration:none;padding:8px 12px;border-radius:8px;
+
+        .logo {
+            max-width: 350px;
+            width: 100%;
+            height: auto;
         }
-        nav a:hover{background:rgba(255,255,255,0.08)}
-        main{margin-top:18px}
-        .hero{
-            background:var(--card);padding:22px;border-radius:12px;box-shadow:var(--shadow);
-            display:flex;flex-direction:column;gap:12px;
+
+        h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
-        .hero h1{margin:0;font-size:1.5rem}
-        .hero p{margin:0;color:var(--muted)}
-        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px}
-        .card{
-            background:var(--card);padding:16px;border-radius:10px;box-shadow:var(--shadow);
-            border:1px solid rgba(15,23,42,0.03);
+
+        .subtitle {
+            color: #5d6d7e;
+            font-size: 18px;
+            margin-bottom: 35px;
+            font-weight: 500;
         }
-        .card h3{margin:0 0 8px 0;font-size:1.05rem}
-        .card p{margin:0;color:var(--muted);font-size:0.95rem}
-        .actions{display:flex;gap:10px;margin-top:14px}
-        .btn{
-            display:inline-block;padding:8px 12px;border-radius:8px;text-decoration:none;color:#fff;
-            background:var(--primary);border:none;cursor:pointer;font-weight:600;
+
+        .description {
+            background: linear-gradient(135deg, #ebf5fb 0%, #d6eaf8 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 35px;
+            color: #34495e;
+            line-height: 1.7;
+            text-align: left;
+            border-left: 5px solid #2980b9;
+            font-size: 15px;
         }
-        .btn.secondary{background:#6c757d}
-        footer{margin-top:22px;padding:12px 0;color:var(--muted);font-size:0.9rem;text-align:center}
-        @media (min-width:900px){
-            .hero{flex-direction:row;align-items:center;justify-content:space-between}
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 16px 35px;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.6);
+            background: linear-gradient(135deg, #2980b9 0%, #1e5a8e 100%);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #2980b9;
+            border: 2px solid #2980b9;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+            border-color: transparent;
+        }
+
+        .btn-icon {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 2px solid #ecf0f1;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .footer strong {
+            color: #34495e;
+        }
+
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 35px 25px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .logo {
+                max-width: 280px;
+            }
+
+            .btn {
+                padding: 14px 30px;
+                font-size: 16px;
+            }
+        }
+
+        /* Animación de entrada suave */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            animation: fadeInUp 0.6s ease-out;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container top">
-            <div class="brand">
-                <div class="logo">SGR</div>
-                <div>
-                    <div style="font-weight:700">Sistema de Gestión de Reclamos</div>
-                    <div style="font-size:0.85rem;opacity:0.9">Panel de inicio</div>
-                </div>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#" data-nav="inicio">Inicio</a></li>
-                    <li><a href="#" data-nav="crear">Crear reclamo</a></li>
-                    <li><a href="#" data-nav="ver">Ver reclamos</a></li>
-                    <li><a href="#" data-nav="estadisticas">Estadísticas</a></li>
-                    <li><a href="#" data-nav="perfil">Perfil</a></li>
-                </ul>
-            </nav>
+    <div class="container">
+        <div class="logo-container">
+            <img src="/static/images/logo.png" alt="UNER - Facultad de Ingeniería" class="logo">
         </div>
-    </header>
+        
+        <div class="divider"></div>
+        
+        <h1>Sistema de Gestión Reclamos</h1>
+        <p class="subtitle">Gestión de Solicitudes y Atención al Usuario</p>
 
-    <main class="container">
-        <section class="hero">
-            <div>
-                <h1>Bienvenido al Sistema de Gestión de Reclamos</h1>
-                <p>Seleccione una opción del menú o comience creando un nuevo reclamo.</p>
-                <div class="actions">
-                    <button class="btn" id="btn-crear">Crear reclamo</button>
-                    <a href="#" class="btn secondary" id="btn-ver">Ver reclamos</a>
-                </div>
-            </div>
-            <div style="min-width:220px;text-align:right;color:var(--muted)">
-                <div style="font-size:0.95rem;font-weight:600">Estado rápido</div>
-                <div style="margin-top:8px">Reclamos abiertos: <strong id="open-count">--</strong></div>
-                <div style="margin-top:6px">Reclamos cerrados: <strong id="closed-count">--</strong></div>
-            </div>
-        </section>
+        <div class="description">
+            <p>
+                <strong>Bienvenido al sistema de gestión de reclamos.</strong> Esta plataforma te permite 
+                registrar tus inquietudes, realizar seguimiento en tiempo real de tus solicitudes 
+                y colaborar con la comunidad adhiriéndote a reclamos existentes.
+            </p>
+        </div>
 
-        <section class="grid" aria-label="Accesos rápidos">
-            <div class="card">
-                <h3>Nuevo reclamo</h3>
-                <p>Registrar un reclamo con detalles y adjuntar documentación relevante.</p>
-                <div style="margin-top:12px">
-                    <button class="btn" onclick="goTo('crear')">Crear</button>
-                </div>
-            </div>
+        <div class="buttons">
+            <a href="/login" class="btn btn-primary">
+                <span class="btn-icon">🔐</span>Iniciar Sesión
+            </a>
+            <a href="/register" class="btn btn-secondary">
+                <span class="btn-icon">✍️</span>Crear Cuenta Nueva
+            </a>
+        </div>
 
-            <div class="card">
-                <h3>Gestión de reclamos</h3>
-                <p>Ver, filtrar y actualizar el estado de los reclamos existentes.</p>
-                <div style="margin-top:12px">
-                    <button class="btn secondary" onclick="goTo('ver')">Ir a reclamos</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Reportes</h3>
-                <p>Generar informes y estadísticas sobre tiempos de respuesta y tipos de reclamo.</p>
-                <div style="margin-top:12px">
-                    <button class="btn" onclick="goTo('estadisticas')">Ver reportes</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Configuración</h3>
-                <p>Administrar usuarios, permisos y parámetros del sistema.</p>
-                <div style="margin-top:12px">
-                    <button class="btn secondary" onclick="goTo('perfil')">Configuración</button>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            &copy; <span id="year"></span> Sistema de Gestión de Reclamos — Todos los derechos reservados.
-        </footer>
-    </main>
-
-    <script>
-        // Rutas simuladas; reemplazar por rutas reales de la aplicación
-        const routes = {
-            inicio: '#',
-            crear: '/reclamos/crear',
-            ver: '/reclamos',
-            estadisticas: '/reportes',
-            perfil: '/perfil'
-        };
-
-        function goTo(route){
-            const url = routes[route] || '#';
-            // En servidor real, usar location.href = url
-            console.log('Navegar a:', url);
-            alert('Navegación: ' + url);
-        }
-
-        document.getElementById('btn-crear').addEventListener('click', ()=>goTo('crear'));
-        document.getElementById('btn-ver').addEventListener('click', ()=>goTo('ver'));
-
-        // Datos de ejemplo para indicadores rápidos (reemplazar con fetch a la API)
-        document.getElementById('open-count').textContent = 12;
-        document.getElementById('closed-count').textContent = 34;
-
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+        <div class="footer">
+            <p><strong>Universidad Nacional de Entre Ríos</strong></p>
+            <p>Facultad de Ingeniería</p>
+            <p style="margin-top: 10px; font-size: 13px;">© 2024 - Sistema de Atención al Usuario</p>
+        </div>
+    </div>
 </body>
 </html>

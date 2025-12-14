@@ -24,7 +24,7 @@ class AdministradorDeDatos:
         self._procesador = ProcesadorArchivo("frases.json")
         self.x,self.y=self._procesador.datosEntrenamiento
 
-        self._clasificador = Clasificador(self.x,self.y, escalado=True)
+        self._Clasificador = Clasificador(self.x,self.y, escalado=True)
 
     @property
     def jefes(self):
@@ -46,7 +46,7 @@ class AdministradorDeDatos:
     def db(self):
         return self._db
 
-    def guardar_usuario(self, email, nombre_usuario, contraseña, Nombre, Apellido, claustro):
+    def guardar_usuario(self, email, nombre_usuario, contraseña, nombre, apellido, claustro):
         """Verifica que los datos ingresados para el registro sean válidos y los guarda en la base de datos,
           devuelve el formulario del registro)"""    
         
@@ -64,8 +64,8 @@ class AdministradorDeDatos:
             usuario = UsuarioFinal(email = email, 
                                    nombre_usuario = nombre_usuario, 
                                    contraseña = contraseña_encriptada, 
-                                   Nombre = Nombre, 
-                                   Apellido = Apellido, 
+                                   nombre = nombre, 
+                                   apellido = apellido, 
                                    claustro = claustro)  #se crea al usuario 
 
             self._db.session.add(usuario)
@@ -79,7 +79,7 @@ class AdministradorDeDatos:
 
         usuario = Usuario.query.filter(UsuarioFinal.__table__.c.nombre_usuario == nombre_usuario).first()
         if not usuario:
-            usuario = JefeDepartamento.query.filter(JefeDepartamento.__table__.c.nombre_usuario == nombre_usuario).first()
+            usuario = JefeDeDepartamento.query.filter(JefeDeDepartamento.__table__.c.nombre_usuario == nombre_usuario).first()
         if not usuario: 
             funcion = "No se encontró el usuario."
            
@@ -89,6 +89,29 @@ class AdministradorDeDatos:
         usuario = None 
         return usuario, funcion
 
+    def guardar_reclamo(self, autor, titulo, descripcion, imagen=None):
+        """Guarda la información del reclamo en un diccionario."""
+
+        contenido = []
+
+        contenido.append(titulo)
+
+        dpto = self._Clasificador.clasificar(contenido)
+        print(dpto)
+
+        self._reclamo={
+                            'autor' : autor,
+                            'departamento' : dpto[0],
+                            'fecha' : datetime.strftime(datetime.now(),'%Y/%m/%d %H:%M:%S'),
+                            'estado' : "pendiente", 
+                            'titulo' : str(titulo),
+                            'descripcion' : str(descripcion)
+
+        }
+        if imagen:
+            
+            self._reclamo['imagen']=images.save(imagen)
+            
     def crear_reclamo(self):  
         """Crea un nuevo reclamo y lo guarda en la base de datos."""
         rec = Reclamo(autor= self._reclamo.get('autor'),
@@ -104,18 +127,22 @@ class AdministradorDeDatos:
         self._db.session.add(rec)
         self._db.session.commit()
         
+
+        self.adherir_usuario(current_user, rec.id)
+        
         
     def obtener_reclamos(self, departamento):
         """Obtiene todos los reclamos de la base de datos."""
         reclamos = Reclamo.query.filter(Reclamo.__table__.c.departamento == departamento).all()
         return reclamos
+    
     def adherir_usuario(self,usuario, reclamo_id):
         """Adhiere un usuario a un reclamo específico."""
         reclamo = Reclamo.query.get(reclamo_id)
-        usuario.adherir_reclamo(reclamo)
+        usuario.adherir_a_reclamo(reclamo)
         self._db.session.commit()
     
-    def buscar_similares(self, texto):
+    def buscar_similares(self):
         """Busca reclamos similares al texto proporcionado."""
         texto = self._reclamo.get('titulo')
         vacio = stopwords.words('spanish')

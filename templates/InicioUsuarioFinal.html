@@ -1,41 +1,332 @@
-{% extends 'bootstrap/base.html' %}
+{% extends 'base.html' %}
 {% import "bootstrap/wtf.html" as wtf %} 
 
 {% block title %}
-Sistema de Reclamos
+Inicio - Sistema de Reclamos FIUNER
 {% endblock %}
 
 {% block body %}
+<style>
+    :root {
+        --primary-blue: #0d6efd;
+        --light-blue: #4a9eff;
+        --lighter-blue: #e7f3ff;
+        --dark-blue: #0a4da3;
+        --success-green: #10b981;
+        --warning-orange: #f59e0b;
+    }
+    
+    .dashboard-page {
+        background: linear-gradient(135deg, #667eea 0%, #4a9eff 100%);
+        min-height: 100vh;
+        padding: 30px 0;
+    }
+    
+    .dashboard-header {
+        background: white;
+        border-radius: 15px;
+        padding: 25px 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideDown 0.5s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .dashboard-header h1 {
+        color: var(--dark-blue);
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+    
+    .welcome-text {
+        color: #6c757d;
+        font-size: 1rem;
+        margin-top: 5px;
+    }
+    
+    .welcome-text strong {
+        color: var(--primary-blue);
+        font-weight: 600;
+    }
+    
+    .user-badge {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .user-badge i {
+        font-size: 1.2rem;
+    }
+    
+    .flash-messages {
+        margin-bottom: 25px;
+    }
+    
+    .alert {
+        border-radius: 12px;
+        border: none;
+        padding: 15px 20px;
+        animation: slideIn 0.4s ease-out;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+    
+    .action-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        display: block;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out;
+        animation-fill-mode: both;
+    }
+    
+    .action-card:nth-child(1) { animation-delay: 0.1s; }
+    .action-card:nth-child(2) { animation-delay: 0.2s; }
+    .action-card:nth-child(3) { animation-delay: 0.3s; }
+    .action-card:nth-child(4) { animation-delay: 0.4s; }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .action-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .action-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .action-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(13, 110, 253, 0.3);
+    }
+    
+    .action-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--lighter-blue) 0%, #cfe7ff 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .action-card:hover .action-icon {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+        transform: scale(1.1) rotate(5deg);
+    }
+    
+    .action-icon i {
+        font-size: 2.2rem;
+        color: var(--primary-blue);
+        transition: color 0.3s ease;
+    }
+    
+    .action-card:hover .action-icon i {
+        color: white;
+    }
+    
+    .action-card h3 {
+        color: var(--dark-blue);
+        font-weight: 700;
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+    }
+    
+    .action-card p {
+        color: #6c757d;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+    
+    /* Colores específicos por acción */
+    .action-card.create::before {
+        background: linear-gradient(90deg, var(--success-green) 0%, #34d399 100%);
+    }
+    
+    .action-card.create:hover {
+        box-shadow: 0 12px 30px rgba(16, 185, 129, 0.3);
+    }
+    
+    .action-card.view::before {
+        background: linear-gradient(90deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+    }
+    
+    .action-card.my-claims::before {
+        background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
+    }
+    
+    .action-card.my-claims:hover {
+        box-shadow: 0 12px 30px rgba(139, 92, 246, 0.3);
+    }
+    
+    .action-card.logout::before {
+        background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+    }
+    
+    .action-card.logout:hover {
+        box-shadow: 0 12px 30px rgba(239, 68, 68, 0.3);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .dashboard-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .actions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
 
-	<div class="container">
-		<h1>Sistema de Reclamos FIUNER</h1>
-		Bienvenido {{usuario}}
-		
-		{% with messages = get_flashed_messages() %}
+<div class="dashboard-page">
+    <div class="container">
+        
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div>
+                <h1><i class="fas fa-clipboard-list me-2"></i>Sistema de Reclamos FIUNER</h1>
+                <p class="welcome-text">Bienvenido, <strong>{{usuario}}</strong></p>
+            </div>
+            <div class="user-badge">
+                <i class="fas fa-user-circle"></i>
+                <span>Usuario</span>
+            </div>
+        </div>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert">
+                            <strong>
+                                {% if category == 'success' %}
+                                    <i class="fas fa-check-circle me-2"></i>
+                                {% elif category == 'danger' or category == 'error' %}
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                {% else %}
+                                    <i class="fas fa-info-circle me-2"></i>
+                                {% endif %}
+                            </strong>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Actions Grid -->
+        <div class="actions-grid">
+            
+            <!-- Crear Reclamo -->
+            <a href="{{ url_for('formulario_reclamo') }}" class="action-card create">
+                <div class="action-icon">
+                    <i class="fas fa-plus-circle">✍</i>
+                </div>
+                <h3>Crear Reclamo</h3>
+                <p>Presentá un nuevo reclamo o sugerencia</p>
+            </a>
+            
+            <!-- Mostrar Reclamos -->
+            <a href="{{ url_for('mostrar_reclamos') }}" class="action-card view">
+                <div class="action-icon">
+                    <i class="fas fa-list-alt"></i>
+                </div>
+                <h3>Todos los Reclamos</h3>
+                <p>Explorá y adhiere a reclamos existentes</p>
+            </a>
+            
+            <!-- Mis Reclamos -->
+            <a href="{{ url_for('mis_reclamos') }}" class="action-card my-claims">
+                <div class="action-icon">
+                    <i class="fas fa-bookmark"></i>
+                </div>
+                <h3>Mis Reclamos</h3>
+                <p>Revisá tus reclamos y seguimientos</p>
+            </a>
+            
+            <!-- Cerrar Sesión -->
+            <a href="{{ url_for('cerrar_sesion') }}" class="action-card logout">
+                <div class="action-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <h3>Cerrar Sesión</h3>
+                <p>Salir del sistema de forma segura</p>
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
 
-		{% if messages %}
-
-			{% for message in messages %}
-
-				{{message}}
-
-			{% endfor %}
-
-		{% endif %}
-
-	{% endwith %}		
-		
-		<div class="row">
-			<div class="col-lg-4">
-
-					<a href="{{ url_for('formulario_reclamo') }}" class="btn btn-primary btn-block btn-large">Crear Reclamo</a>
-					<a href="{{ url_for('mostrar_reclamos') }}" class="btn btn-primary btn-block btn-large">Mostrar Reclamos</a>
-                    <a href="{{ url_for('mis_reclamos') }}" class="btn btn-primary btn-block btn-large">Mis Reclamos</a>
-					<a href="{{ url_for('cerrar_sesion') }}" class="btn btn-primary btn-block btn-large">Cerrar sesion</a>
-
-			</div>	
-		</div>
-	</div>
 {% endblock %}
-
-

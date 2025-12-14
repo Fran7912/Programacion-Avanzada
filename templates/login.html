@@ -1,37 +1,272 @@
-{% extends 'bootstrap/base.html' %}
+{% extends 'base.html' %} 
 {% import "bootstrap/wtf.html" as wtf %} 
 
 {% block title %}
-Sistema de Reclamos
+Iniciar Sesión - FIUNER
 {% endblock %}
 
 {% block body %}
-	<div class="container mx-auto my-4">
-		<h1>Sistema de Reclamos FIUNER</h1>
-		<h2>Iniciar Sesión</h2>
-		
-		{% with messages = get_flashed_messages() %}
+<style>
+    :root {
+        --primary-blue: #0d6efd;
+        --light-blue: #4a9eff;
+        --lighter-blue: #e7f3ff;
+        --dark-blue: #0a4da3;
+    }
+    
+    .login-page {
+        background: linear-gradient(135deg, #667eea 0%, #4a9eff 100%);
+        min-height: 100vh;
+    }
+    
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    
+    .login-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        max-width: 480px;
+        width: 100%;
+        animation: slideUp 0.5s ease-out;
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .login-header {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+        padding: 40px 30px 35px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .login-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        animation: pulse 15s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+    
+    .login-header h2 {
+        color: white;
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 1.8rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .login-header p {
+        color: rgba(255, 255, 255, 0.9);
+        margin: 0;
+        font-size: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .login-icon {
+        width: 80px;
+        height: 80px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 1;
+    }
+    
+    .login-icon i {
+        font-size: 2rem;
+        color: var(--primary-blue);
+    }
+    
+    .login-body {
+        padding: 40px 35px;
+    }
+    
+    .form-label {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+    
+    .form-control {
+        border: 2px solid #e1e8ed;
+        border-radius: 10px;
+        padding: 12px 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: var(--light-blue);
+        box-shadow: 0 0 0 0.2rem rgba(74, 158, 255, 0.25);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 14px;
+        font-weight: 600;
+        font-size: 1.05rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+    }
+    
+    .btn-primary:active {
+        transform: translateY(0);
+    }
+    
+    .login-footer {
+        background: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .login-footer a {
+        color: #6c757d;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .login-footer a:hover {
+        color: var(--primary-blue);
+        gap: 12px;
+    }
+    
+    .alert {
+        border-radius: 12px;
+        border: none;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+        animation: slideDown 0.4s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .alert-danger {
+        background-color: #fee;
+        color: #c33;
+    }
+    
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .alert-warning {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    form .form-group {
+        margin-bottom: 20px;
+    }
+    
+    @media (max-width: 576px) {
+        .login-header h2 {
+            font-size: 1.5rem;
+        }
+        
+        .login-body {
+            padding: 30px 25px;
+        }
+        
+        .login-icon {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .login-icon i {
+            font-size: 1.6rem;
+        }
+    }
+</style>
 
-			{% if messages %}
-
-    			{% for message in messages %}
-
-        			{{message}}
-
-    			{% endfor %}
-
-			{% endif %}
-
-		{% endwith %}		
-
-		<div class="row">
-			<div class="col-lg-6">
-				<!--hace un post a la misma ruta donde se crea el formulario-->
-				{{ wtf.quick_form(form, novalidate=True) }}			
-			</div>
-				
-		</div>
-			
-	</div>
-	<a href="/" class="btn btn-primary btn-block btn-large">Menú Principal</a>
+<div class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            
+            <div class="login-header">
+                <div class="login-icon">
+                     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo FIUNER" style="width: 60px; height: 80px; object-fit: contain;">
+                </div>
+                <h2>Sistema de Reclamos</h2>
+                <p>FIUNER - Ingresá tus credenciales</p>
+            </div>
+            
+            <div class="login-body">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category if category != 'message' else 'warning' }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                {{ wtf.quick_form(form, button_map={'submit': 'primary btn-lg w-100'}) }}
+            </div>
+            
+            <div class="login-footer">
+                <a href="/">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Volver al Menú Principal</span>
+                </a>
+            </div>
+            
+        </div>
+    </div>
+</div>
 {% endblock %}
