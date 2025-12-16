@@ -160,7 +160,7 @@ class AdministradorDeDatos:
 
         return resultados
     
-    def obtener_reclamo_departamento_estado(self, departamento, estado):
+    def obtener_reclamos_departamento_estado(self, departamento):
         """devuelve listas de  reclamos filtrados por departamento y estado."""
         reclamos_en_proceso=list(Reclamo.query.filter(Reclamo.__table__.c.departamento == departamento , Reclamo.__table__.c.estado == "en proceso").all())
         reclamos_pendiente=list(Reclamo.query.filter(Reclamo.__table__.c.departamento == departamento , Reclamo.__table__.c.estado == "pendiente").all())

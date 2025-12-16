@@ -173,7 +173,6 @@ def adherir_a_reclamo(id):
 
 #Solo JefesDepartamentos
 
-
 @app.route("/InicioJefe")
 @solo_jefes
 def inicio_jefes():
@@ -184,21 +183,21 @@ def inicio_jefes():
 def analitica():
 
     departamento = current_user.departamento_asignado
-    #graficador_diagrama.graficar(admin_datos, departamento, 'default', 'svg')
+    graficador_diagrama.graficar(admin_datos, departamento, 'default', 'svg')
     graficador_nube.graficar(admin_datos, departamento, 'default', 'png')
-    #informe_pdf=informante_pdf.generar_informe(current_user.departamento)
-    return render_template('analitica.html')       #return render_template('analitica.html', informe_pdf=informe_pdf) retiro informe_pdf=informe_pdf
+
+    return render_template('analitica.html', departamento=departamento.lower().replace(' ', '_'))      
 
 @app.route('/managecomplains')
 @solo_jefes
 def manejar_reclamos():
-    if current_user.departamento=="secretaría técnica":
+    if current_user.departamento_asignado=="secretaría técnica":
         reclamos=Reclamo.query.all()
         if len(reclamos)==0:
             flash("No tiene reclamos")
         return render_template("manejar_reclamos.html", reclamos=reclamos)
     else:
-        reclamos=Reclamo.query.filter(Reclamo.__table__.c.departamento == current_user.departamento).all()
+        reclamos=Reclamo.query.filter(Reclamo.__table__.c.departamento == current_user.departamento_asignado).all()
     if len(reclamos)==0:
             flash("No tiene reclamos")
     return render_template("manejar_reclamos.html", reclamos=reclamos)
@@ -213,7 +212,7 @@ def ayuda():
 def editar(id):
     reclamo=Reclamo.query.get(id)
 
-    if current_user.departamento=="secretaría técnica":
+    if current_user.departamento_asignado=="secretaría técnica":
 
         form_editar=ParaSecretarioTecnico()
         if form_editar.validate_on_submit():
@@ -241,17 +240,54 @@ def editar(id):
 @app.route("/generar_informe/<formato>")
 @solo_jefes
 def generar_Informe(formato):
-    if formato=="pdf":
-
-        informante=InformantePDF(graficador_torta=graficador_diagrama, 
-                                 graficador_nube=graficador_nube)
+    """Genera y descarga informe en PDF o HTML"""
+    
+    print(f"🔍 Formato: {formato}")
+    print(f"🔍 Departamento: {current_user.departamento_asignado}")
+    
+    try:
+        if formato == "pdf":
+            informante = InformantePDF(
+                graficador_torta=graficador_diagrama, 
+                graficador_nube=graficador_nube
+            )
+            
+            resultado = informante.generar_informe(
+                departamento=current_user.departamento_asignado,
+                admin_datos=admin_datos
+            )
+            
+            if resultado:
+                return resultado
+            else:
+                flash('Error al generar PDF', 'danger')
+                return redirect(url_for('analitica'))
+        elif formato == "html":
+            informante = InformanteHTML(
+                graficador_torta=graficador_diagrama, 
+                graficador_nube=graficador_nube
+            )
+            
+            resultado = informante.generar_informe(
+                departamento=current_user.departamento_asignado,
+                admin_datos=admin_datos
+            )
+            
+            if resultado:
+                return resultado
+            else:
+                flash('Error al generar HTML', 'danger')
+                return redirect(url_for('analitica'))
         
-        
-    else:    
-        informante=InformanteHTML(graficador_torta=graficador_diagrama, 
-                                  graficador_nube=graficador_nube)
-        
-    return informante.generar_informe(current_user.departamento, admin_datos)
+        else:
+            flash('Formato no soportado', 'warning')
+            return redirect(url_for('analitica'))
+    
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        flash(f'Error: {str(e)}', 'danger')
+        return redirect(url_for('analitica'))
 
 if __name__ == "__main__":
     app.run(debug=True)
