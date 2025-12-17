@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="400">
 <style>text{font-family:'Droid Sans Mono';font-weight:normal;font-style:normal;}</style>
 <rect width="100%" height="100%" style="fill:white"></rect>
-<text transform="translate(22,268)" font-size="170" style="fill:rgb(44, 114, 142)">agua</text>
-<text transform="translate(29,131)" font-size="170" style="fill:rgb(71, 46, 124)">faltan</text>
-<text transform="translate(214,397)" font-size="139" style="fill:rgb(68, 2, 86)">bidones</text>
-<text transform="translate(415,226)" font-size="106" style="fill:rgb(31, 153, 138)">modulo</text>
+<text transform="translate(19,151)" font-size="200" style="fill:rgb(35, 136, 142)">agua</text>
+<text transform="translate(22,382)" font-size="200" style="fill:rgb(72, 193, 110)">faltan</text>
+<text transform="translate(335,241)" font-size="110" style="fill:rgb(31, 159, 136)">bidones</text>
+<text transform="translate(480,121)" font-size="88" style="fill:rgb(71, 45, 123)">modulo</text>
 </svg>

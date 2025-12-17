@@ -123,7 +123,7 @@ def formulario_reclamo():
     form_reclamo = FormularioCrearReclamo()
     
     if form_reclamo.validate_on_submit():
-            admin_datos.guardar_reclamo(autor=current_user.nombre_usuario, 
+            admin_datos.guardar_datos_reclamo(autor=current_user.nombre_usuario, 
                                               titulo=form_reclamo.titulo.data, 
                                               descripcion=form_reclamo.descripcion.data, 
                                               imagen=form_reclamo.imagen.data)
@@ -182,7 +182,7 @@ def inicio_jefes():
 @solo_jefes
 def analitica():
 
-    departamento = current_user.departamento_asignado
+    departamento = current_user.departamento
     graficador_diagrama.graficar(admin_datos, departamento, 'default', 'svg')
     graficador_nube.graficar(admin_datos, departamento, 'default', 'png')
 
@@ -191,13 +191,13 @@ def analitica():
 @app.route('/managecomplains')
 @solo_jefes
 def manejar_reclamos():
-    if current_user.departamento_asignado=="secretaría técnica":
+    if current_user.departamento=="secretaría técnica":
         reclamos=Reclamo.query.all()
         if len(reclamos)==0:
             flash("No tiene reclamos")
         return render_template("manejar_reclamos.html", reclamos=reclamos)
     else:
-        reclamos=Reclamo.query.filter(Reclamo.__table__.c.departamento == current_user.departamento_asignado).all()
+        reclamos=Reclamo.query.filter(Reclamo.__table__.c.departamento == current_user.departamento).all()
     if len(reclamos)==0:
             flash("No tiene reclamos")
     return render_template("manejar_reclamos.html", reclamos=reclamos)
@@ -212,7 +212,7 @@ def ayuda():
 def editar(id):
     reclamo=Reclamo.query.get(id)
 
-    if current_user.departamento_asignado=="secretaría técnica":
+    if current_user.departamento=="secretaría técnica":
 
         form_editar=ParaSecretarioTecnico()
         if form_editar.validate_on_submit():
@@ -241,10 +241,6 @@ def editar(id):
 @solo_jefes
 def generar_Informe(formato):
     """Genera y descarga informe en PDF o HTML"""
-    
-    print(f"🔍 Formato: {formato}")
-    print(f"🔍 Departamento: {current_user.departamento_asignado}")
-    
     try:
         if formato == "pdf":
             informante = InformantePDF(
@@ -253,7 +249,7 @@ def generar_Informe(formato):
             )
             
             resultado = informante.generar_informe(
-                departamento=current_user.departamento_asignado,
+                departamento=current_user.departamento,
                 admin_datos=admin_datos
             )
             
@@ -269,7 +265,7 @@ def generar_Informe(formato):
             )
             
             resultado = informante.generar_informe(
-                departamento=current_user.departamento_asignado,
+                departamento=current_user.departamento,
                 admin_datos=admin_datos
             )
             

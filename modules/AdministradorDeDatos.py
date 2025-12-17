@@ -77,7 +77,7 @@ class AdministradorDeDatos:
         """Carga un usuario de la base de datos según su nombre de usuario."""
         funcion = "inicio_para_usuario_final"
 
-        usuario = Usuario.query.filter(UsuarioFinal.__table__.c.nombre_usuario == nombre_usuario).first()
+        usuario = UsuarioFinal.query.filter(UsuarioFinal.__table__.c.nombre_usuario == nombre_usuario).first()
         if not usuario:
             usuario = JefeDeDepartamento.query.filter(JefeDeDepartamento.__table__.c.nombre_usuario == nombre_usuario).first()
         if not usuario: 
@@ -85,11 +85,11 @@ class AdministradorDeDatos:
            
         elif check_password_hash(usuario.contraseña , contraseña):
             return usuario, funcion
-        
         usuario = None 
         return usuario, funcion
 
-    def guardar_reclamo(self, autor, titulo, descripcion, imagen=None):
+
+    def guardar_datos_reclamo(self, autor, titulo, descripcion, imagen=None):
         """Guarda la información del reclamo en un diccionario."""
 
         contenido = []
@@ -148,7 +148,7 @@ class AdministradorDeDatos:
         vacio = stopwords.words('spanish')
         text_tokens = word_tokenize(texto.lower())
 
-        p_clave = [palabra for palabra in text_tokens if palabra not in vacio and len(palabra)>=4]
+        p_clave = [palabra for palabra in text_tokens if palabra not in vacio and len(palabra)>=3]
 
         resultados =[]
 

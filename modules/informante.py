@@ -14,12 +14,12 @@ import aspose.words as aw
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, A4
 
-class Graficardor(ABC):
+class Graficador(ABC):
     @abstractmethod
     def graficar(self, admin, departamento, ruta_base, tipo):
         pass
 
-class GraficadorPalabrasClave(Graficardor):
+class GraficadorPalabrasClave(Graficador):
 
     def graficar (self, admin, departamento, ruta_base, tipo):
         """Grafica las palabras que más se repiten en los reclamos"""
@@ -69,7 +69,7 @@ class GraficadorPalabrasClave(Graficardor):
     
 
 
-class GraficadorDiagramaCircular(Graficardor):
+class GraficadorDiagramaCircular(Graficador):
     def graficar(self, admin, departamento, ruta_base, tipo):
         """"Genera diagrama circular"""
 
@@ -87,6 +87,15 @@ class GraficadorDiagramaCircular(Graficardor):
                     len(reclamos_enproceso),
                     len(reclamos_resuelto), 
                     len(reclamos_invalido)]
+        if sum(cantidades) == 0:
+            return None
+        datos_filtrados = [
+            (estado, cant) 
+            for estado, cant in zip(estados_reclamos, cantidades) 
+            if cant > 0
+            ]
+        estados_filtrados = [d[0] for d in datos_filtrados]
+        cantidades_filtradas = [d[1] for d in datos_filtrados]
         
         plt.style.use("ggplot")
         plt.title("Estados de los reclamos")
@@ -325,7 +334,7 @@ class InformanteHTML(Informante):
             print(f"⚠️ Archivo no encontrado: {ruta_nube}")
 
         # 4. Obtener datos de reclamos
-        reclamos = admin_datos.ObtenerReclamos(departamento)
+        reclamos = admin_datos.obtener_reclamos(departamento)
         
         # Construir items de la lista
         items_html = ""

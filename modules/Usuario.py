@@ -23,7 +23,7 @@ class UsuarioFinal(Usuario):
         
 
 class JefeDeDepartamento(Usuario): 
-    _departamento_asigando = Column('departamento', String(100)) 
+    _departamento = Column('departamento', String(100)) 
 
 
     def __init__(self,Nombre,Apellido,email,nombre_usuario, contraseña, Departamento): 
@@ -31,7 +31,7 @@ class JefeDeDepartamento(Usuario):
         self._departamento = Departamento
 
     @property 
-    def departamento_asignado(self): 
-           return self._departamento_asigando
+    def departamento(self): 
+           return self._departamento
     
     

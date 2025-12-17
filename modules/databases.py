@@ -56,6 +56,9 @@ class Usuario(UserMixin, db.Model):
     def apellido(self):
         return self._apellido
 
+    @property
+    def email(self):
+        return self._email
 
 
 class Reclamo(db.Model):
