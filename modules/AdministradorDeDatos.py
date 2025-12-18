@@ -142,7 +142,7 @@ class AdministradorDeDatos:
         usuario.adherir_a_reclamo(reclamo)
         self._db.session.commit()
     
-    def buscar_similares(self):
+    def buscar_reclamos_similares(self):
         """Busca reclamos similares al texto proporcionado."""
         texto = self._reclamo.get('titulo')
         vacio = stopwords.words('spanish')

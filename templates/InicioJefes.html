@@ -1,24 +1,248 @@
-{% extends 'bootstrap/base.html' %}
+{% extends 'base.html' %}
 {% import "bootstrap/wtf.html" as wtf %} 
 
 {% block title %}
-Sistema de Reclamos
+Panel de Jefe - Sistema de Reclamos FIUNER
 {% endblock %}
 
 {% block body %}
+<style>
+    :root {
+        --primary-blue: #0d6efd;
+        --light-blue: #4a9eff;
+        --dark-blue: #0a4da3;
+        --purple: #8b5cf6;
+        --orange: #f59e0b;
+    }
+    
+    .dashboard-page {
+        background: linear-gradient(135deg, #667eea 0%, #4a9eff 100%);
+        min-height: 100vh;
+        padding: 30px 0;
+    }
+    
+    .dashboard-header {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .dashboard-header h1 {
+        color: var(--dark-blue);
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+    
+    .dashboard-header p {
+        color: #6c757d;
+        margin: 5px 0 0 0;
+    }
+    
+    .jefe-badge {
+        background: linear-gradient(135deg, var(--purple) 0%, #a78bfa 100%);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .jefe-badge i {
+        font-size: 1.3rem;
+    }
+    
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+    
+    .action-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        display: block;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .action-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .action-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .action-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(13, 110, 253, 0.3);
+    }
+    
+    .action-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #e7f3ff 0%, #cfe7ff 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        transition: all 0.3s ease;
+    }
+    
+    .action-card:hover .action-icon {
+        background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+        transform: scale(1.1) rotate(5deg);
+    }
+    
+    .action-icon i {
+        font-size: 2.2rem;
+        color: var(--primary-blue);
+        transition: color 0.3s ease;
+    }
+    
+    .action-card:hover .action-icon i {
+        color: white;
+    }
+    
+    .action-card h3 {
+        color: var(--dark-blue);
+        font-weight: 700;
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+    }
+    
+    .action-card p {
+        color: #6c757d;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+    
+    /* Colores específicos */
+    .action-card.analytics::before {
+        background: linear-gradient(90deg, var(--purple) 0%, #a78bfa 100%);
+    }
+    
+    .action-card.analytics:hover {
+        box-shadow: 0 12px 30px rgba(139, 92, 246, 0.3);
+    }
+    
+    .action-card.manage::before {
+        background: linear-gradient(90deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+    }
+    
+    .action-card.help::before {
+        background: linear-gradient(90deg, var(--orange) 0%, #fbbf24 100%);
+    }
+    
+    .action-card.help:hover {
+        box-shadow: 0 12px 30px rgba(245, 158, 11, 0.3);
+    }
+    
+    .action-card.logout::before {
+        background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+    }
+    
+    .action-card.logout:hover {
+        box-shadow: 0 12px 30px rgba(239, 68, 68, 0.3);
+    }
+    
+    @media (max-width: 768px) {
+        .dashboard-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .actions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
 
-	<div class="container">
-		<h1>Sistema de Reclamos FIUNER</h1>
-		
-		<div class="row">
-			<div class="col-lg-4">
+<div class="dashboard-page">
+    <div class="container">
+        
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div>
+                <h1><i class="fas fa-user-tie me-2"></i>Panel de Jefe de Departamento</h1>
+                <p>Sistema de Gestión de Reclamos - FIUNER</p>
+            </div>
+            <div class="jefe-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>Administrador</span>
+            </div>
+        </div>
+        
+        <!-- Actions Grid -->
+        <div class="actions-grid">
+            
+            <!-- Analítica -->
+            <a href="{{ url_for('analitica') }}" class="action-card analytics">
+                <div class="action-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3>Analítica</h3>
+                <p>Visualizá estadísticas y reportes del departamento</p>
+            </a>
+            
+            <!-- Manejar Reclamos -->
+            <a href="{{ url_for('manejar_reclamos') }}" class="action-card manage">
+                <div class="action-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3>Manejar Reclamos</h3>
+                <p>Gestioná y respondé reclamos asignados</p>
+            </a>
+            
+            <!-- Ayuda -->
+            <a href="{{ url_for('ayuda') }}" class="action-card help">
+                <div class="action-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <h3>Ayuda</h3>
+                <p>Consultá guías y documentación del sistema</p>
+            </a>
+            
+            <!-- Cerrar Sesión -->
+            <a href="{{ url_for('cerrar_sesion') }}" class="action-card logout">
+                <div class="action-icon">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+                <h3>Cerrar Sesión</h3>
+                <p>Salir del sistema de forma segura</p>
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
 
-					<a href="{{ url_for('analitica') }}" class="btn btn-primary btn-block btn-large">AnalÍtica</a>
-					<a href="{{ url_for('manejar_reclamos') }}" class="btn btn-primary btn-block btn-large">Manejar Reclamos</a>
-                    <a href="{{ url_for('ayuda') }}" class="btn btn-primary btn-block btn-large">Ayuda</a>
-                    <a href="{{ url_for('cerrar_sesion') }}" class="btn btn-primary btn-block btn-large">Cerrar Sesión</a>
-
-			</div>	
-		</div>
-	</div>
 {% endblock %}

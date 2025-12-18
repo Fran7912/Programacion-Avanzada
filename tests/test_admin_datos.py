@@ -233,7 +233,7 @@ class TestAdministradorDeDatos(unittest.TestCase):
         self.assertEqual(reclamos[0].titulo,'Sin luces en el aula 2')
         self.assertEqual(reclamos[0].estado,'pendiente')
         
-    def test_buscar_similares(self):    
+    def test_buscar_reclamos_similares(self):    
         reclamo1 = Reclamo(autor='Juan', departamento='secretaría técnica', fecha='2025/12/02 16:01:26', estado='pendiente', titulo='Los pasillos del ala 2 están algo oscuros. Les falta luminosidad.', descripcion='eqw')
         reclamo2 = Reclamo(autor='José', departamento='soporte informático', fecha='2023/23/04 09:38:47', estado='pendiente', titulo='No anda la red wifi de alumnos.', descripcion='eqw')
 
@@ -248,12 +248,13 @@ class TestAdministradorDeDatos(unittest.TestCase):
                                     titulo = 'El aula 3 está algo oscura. Le falta luminosidad.', 
                                     descripcion='Tenemos sed', 
                                     imagen=False)
-        reclamos=admin.buscar_similares()
+        reclamos=admin.buscar_reclamos_similares()
         self.assertEqual(len(reclamos),1)
         self.assertEqual(reclamos[0].autor,'Juan')
         self.assertEqual(reclamos[0].departamento,'secretaría técnica')
         self.assertEqual(reclamos[0].titulo,'Los pasillos del ala 2 están algo oscuros. Les falta luminosidad.')
         self.assertEqual(reclamos[0].estado,'pendiente')
+        
     def test_obtener_reclamos_departamento_sep_estado(self):
             reclamo1=Reclamo(autor='Juan', 
                              departamento='secretaría técnica', 

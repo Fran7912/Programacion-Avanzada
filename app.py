@@ -136,7 +136,7 @@ def formulario_reclamo():
 @solo_usuarios_finales
 def mostrar_reclamos_similares():
     
-    reclamos=admin_datos.buscar_similares()
+    reclamos=admin_datos.buscar_reclamos_similares()
 
     return render_template('reclamos_similares.html', reclamos=reclamos)
 
@@ -284,6 +284,36 @@ def generar_Informe(formato):
         traceback.print_exc()
         flash(f'Error: {str(e)}', 'danger')
         return redirect(url_for('analitica'))
+    
+@app.route("/crearbasededatos")
+def activar_jefes():
+    secretario_tecnico = JefeDeDepartamento(email = 'secretariotecnico@email.com',
+                                          nombre_usuario = 'Tecnico', 
+                                          contraseña = generate_password_hash('12345678'), 
+                                          Nombre = 'Secretario', 
+                                          Apellido = 'Tecnico', 
+                                          Departamento = "secretaría técnica")
+
+    jefe_informatica = JefeDeDepartamento(email = 'informatico@email.com',
+                                        nombre_usuario = 'Informatico', 
+                                        contraseña = generate_password_hash('12345678'), 
+                                        Nombre = 'departamento_de_informatica', 
+                                        Apellido = 'Informatico', 
+                                        Departamento = "soporte informático")
+
+    jefe_maestranza = JefeDeDepartamento(email = 'maestranza@email.com',
+                                       nombre_usuario = 'Maestranza', 
+                                       contraseña = generate_password_hash('12345678'), 
+                                       Nombre = 'departamento_de_maestranza', 
+                                       Apellido = 'Profesional', 
+                                       Departamento = "maestranza")
+
+    db.session.add(secretario_tecnico)
+    db.session.add(jefe_informatica)
+    db.session.add(jefe_maestranza)
+    db.session.commit()
+
+    return "jefes agregados correctamente"
 
 if __name__ == "__main__":
     app.run(debug=True)

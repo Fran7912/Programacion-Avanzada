@@ -1,56 +1,278 @@
-{% extends 'bootstrap/base.html' %}
+{% extends 'base.html' %}
 {% import "bootstrap/wtf.html" as wtf %} 
 
 {% block title %}
-Sistema de Reclamos
+Manejar Reclamos - Sistema FIUNER
 {% endblock %}
 
 {% block body %}
+<style>
+    :root {
+        --primary-blue: #0d6efd;
+        --light-blue: #4a9eff;
+        --dark-blue: #0a4da3;
+        --purple: #8b5cf6;
+    }
+    
+    .manage-page {
+        background: linear-gradient(135deg, #667eea 0%, #4a9eff 100%);
+        min-height: 100vh;
+        padding: 30px 0;
+    }
+    
+    .page-header {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .page-header h1 {
+        color: var(--dark-blue);
+        font-weight: 700;
+        margin: 0;
+        font-size: 1.8rem;
+    }
+    
+    .alert {
+        border-radius: 12px;
+        padding: 15px 20px;
+        margin-bottom: 25px;
+    }
+    
+    .reclamo-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid var(--purple);
+    }
+    
+    .reclamo-title {
+        color: var(--dark-blue);
+        font-weight: 700;
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+    }
+    
+    .estado-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-left: 10px;
+    }
+    
+    .estado-badge.pendiente {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .estado-badge.en-proceso {
+        background: #cfe2ff;
+        color: #084298;
+    }
+    
+    .estado-badge.resuelto {
+        background: #d1e7dd;
+        color: #0a3622;
+    }
+    
+    .estado-badge.rechazado {
+        background: #f8d7da;
+        color: #842029;
+    }
+    
+    .reclamo-description {
+        color: #495057;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+    
+    .reclamo-info {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .reclamo-info p {
+        margin: 8px 0;
+        color: #495057;
+    }
+    
+    .reclamo-info strong {
+        color: var(--dark-blue);
+    }
+    
+    .reclamo-image {
+        margin: 20px 0;
+    }
+    
+    .reclamo-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .adheridos-list {
+        background: #e7f3ff;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 15px 0;
+    }
+    
+    .adheridos-list strong {
+        color: var(--dark-blue);
+        display: block;
+        margin-bottom: 10px;
+    }
+    
+    .adheridos-list span {
+        display: inline-block;
+        background: white;
+        padding: 5px 12px;
+        border-radius: 15px;
+        margin: 5px 5px 5px 0;
+        font-size: 0.9rem;
+    }
+    
+    .btn-editar {
+        background: linear-gradient(135deg, var(--purple) 0%, #a78bfa 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: transform 0.2s;
+    }
+    
+    .btn-editar:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    .btn-back {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 10px;
+    }
+    
+    .btn-back:hover {
+        color: white;
+        opacity: 0.9;
+    }
+    
+    .empty-state {
+        background: white;
+        border-radius: 15px;
+        padding: 60px 30px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .empty-state i {
+        font-size: 4rem;
+        color: var(--light-blue);
+        margin-bottom: 20px;
+    }
+    
+    @media (max-width: 768px) {
+        .page-header h1 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
 
-	<div class="container">
-		<h1>Sistema de Reclamos FIUNER</h1>
-		
-		{% with messages = get_flashed_messages() %}
-
-			{% if messages %}
-
-    			{% for message in messages %}
-
-        			{{message}}
-
-    			{% endfor %}
-
-			{% endif %}
-
-		{% endwith %}		
-
-
-        {% for reclamo in reclamos %}
+<div class="manage-page">
+    <div class="container">
         
-
-        <h5>Título:{{reclamo.titulo}}</h5>
-        <h5></h5>
-        <h5>Descripción:{{reclamo.descripcion}}</h5>
-        <h5></h5>
-        <i>Fecha:{{reclamo.fecha}}</h4>
-        <h5></h5>
-        <h5>Autor:{{reclamo.autor}}</h5>
-        <h5></h5>
-        <h5>Adheridos:</h5> 
-        {% for adherido in reclamo.usuarios_adheridos %}
-        <h5>{{adherido.nombre_usuario}}</h5>
-        {% endfor %}
-        <h5>Departamento:{{reclamo.departamento}}</h5>
-        <h5></h5>
-        {% if reclamo.imagen %}
-        <img src="/static/uploads/images/{{reclamo.imagen}}" width="400">
+        <!-- Header -->
+        <div class="page-header">
+            <h1><i class="fas fa-tasks me-2"></i>Gestión de Reclamos</h1>
+        </div>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category if category != 'message' else 'info' }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Lista de Reclamos -->
+        {% if reclamos %}
+            {% for reclamo in reclamos %}
+            <div class="reclamo-card">
+                
+                <h2 class="reclamo-title">
+                    {{ reclamo.titulo }}
+                    <span class="estado-badge {{ reclamo.estado|lower|replace(' ', '-') }}">
+                        {{ reclamo.estado }}
+                    </span>
+                </h2>
+                
+                <p class="reclamo-description">{{ reclamo.descripcion }}</p>
+                
+                <div class="reclamo-info">
+                    <p><strong><i class="fas fa-calendar me-2"></i>Fecha:</strong> {{ reclamo.fecha }}</p>
+                    <p><strong><i class="fas fa-user me-2"></i>Autor:</strong> {{ reclamo.autor }}</p>
+                    <p><strong><i class="fas fa-building me-2"></i>Departamento:</strong> {{ reclamo.departamento if reclamo.departamento else 'Sin asignar' }}</p>
+                </div>
+                
+                {% if reclamo.imagen %}
+                <div class="reclamo-image">
+                    <img src="/static/uploads/images/{{ reclamo.imagen }}" alt="Imagen del reclamo">
+                </div>
+                {% endif %}
+                
+                {% if reclamo.usuarios_adheridos %}
+                <div class="adheridos-list">
+                    <strong><i class="fas fa-users me-2"></i>Adheridos ({{ reclamo.usuarios_adheridos|length }}):</strong>
+                    {% for adherido in reclamo.usuarios_adheridos %}
+                        <span>{{ adherido.nombre_usuario }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <a href="/editar/{{ reclamo.id }}" class="btn-editar">
+                    <i class="fas fa-edit me-2"></i>Editar Reclamo
+                </a>
+                
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h3>No hay reclamos asignados</h3>
+                <p>Tu departamento no tiene reclamos pendientes de gestión</p>
+            </div>
         {% endif %}
-        <h5></h5>
-        <h5>Estado: {{reclamo.estado}}</h5>
-        <h5></h5>
-        <a href="/editar/{{reclamo.id}}" class="btn btn-primary btn-block btn-large">Editar</a>
         
-        {% endfor %}
+        <!-- Botón Volver -->
+        <div class="text-center">
+            <a href="/" class="btn-back">
+                <i class="fas fa-arrow-left me-2"></i>Volver al Menú Principal
+            </a>
+        </div>
+        
+    </div>
+</div>
 
-        <a href="/" class="btn btn-primary btn-block btn-large">Menú Principal</a>
 {% endblock %}

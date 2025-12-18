@@ -141,9 +141,8 @@ class InformantePDF(Informante):
     def generar_informe(self, departamento, admin_datos):
         """Genera un informe PDF con gráficos"""
         
-        print(f"📄 Generando informe PDF para: {departamento}")
+        print(f"Generando informe PDF para: {departamento}")
         
-        # 1. Generar gráficos
         try:
             self._graficador_torta.graficar(
                 admin_datos, 
@@ -157,9 +156,7 @@ class InformantePDF(Informante):
                 'default', 
                 'png'
             )
-            print("✅ Gráficos generados")
         except Exception as e:
-            print(f"❌ Error al generar gráficos: {e}")
             return None
         
         # 2. Construir rutas de los gráficos
@@ -171,16 +168,13 @@ class InformantePDF(Informante):
         ruta_diagrama = os.path.join(ruta_diagramas, f"diagrama_circular_{nombre_limpio}.png")
         ruta_nube = os.path.join(ruta_diagramas, f"nube_palabras_{nombre_limpio}.png")
         
-        print(f"🔍 Buscando diagrama: {ruta_diagrama}")
-        print(f"🔍 Buscando nube: {ruta_nube}")
-        
         # 3. Verificar que existen
         if not os.path.exists(ruta_diagrama):
-            print(f"⚠️  No existe: {ruta_diagrama}")
+            print(f" No existe: {ruta_diagrama}")
             ruta_diagrama = None
         
         if not os.path.exists(ruta_nube):
-            print(f"⚠️  No existe: {ruta_nube}")
+            print(f"No existe: {ruta_nube}")
             ruta_nube = None
         
         # 4. Crear directorio para PDFs
@@ -191,15 +185,13 @@ class InformantePDF(Informante):
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         nombre_pdf = f"Informe_{nombre_limpio}_{timestamp}.pdf"
         ruta_pdf = os.path.join(ruta_docs, nombre_pdf)
-        
-        print(f"📄 Creando PDF en: {ruta_pdf}")
+      
         
         # 5. Crear el PDF
         try:
             c = canvas.Canvas(ruta_pdf, pagesize=A4)
             width, height = A4
-            
-            # Título
+        
             c.setFont('Helvetica-Bold', 20)
             c.drawString(50, height - 50, f"Informe de Reclamos")
             
@@ -224,9 +216,9 @@ class InformantePDF(Informante):
                 try:
                     c.drawImage(ruta_diagrama, 50, y_pos - 250, width=250, height=250)
                     y_pos -= 270
-                    print("✅ Diagrama insertado")
+                    print("Diagrama insertado")
                 except Exception as e:
-                    print(f"❌ Error al insertar diagrama: {e}")
+                    print(f"Error al insertar diagrama: {e}")
                     c.drawString(50, y_pos, "Error al cargar diagrama")
                     y_pos -= 20
             
@@ -242,16 +234,15 @@ class InformantePDF(Informante):
                 
                 try:
                     c.drawImage(ruta_nube, 50, y_pos - 250, width=250, height=250)
-                    print("✅ Nube insertada")
+                    print("Nube insertada")
                 except Exception as e:
-                    print(f"❌ Error al insertar nube: {e}")
+                    print(f"Error al insertar nube: {e}")
                     c.drawString(50, y_pos, "Error al cargar nube")
             
             # Guardar PDF
             c.save()
-            print(f"✅ PDF guardado: {ruta_pdf}")
+            print(f"PDF guardado: {ruta_pdf}")
             
-            # ✅ ESTO ES CRÍTICO: Retornar send_file()
             return send_file(
                 ruta_pdf,
                 as_attachment=True,
@@ -260,7 +251,7 @@ class InformantePDF(Informante):
             )
         
         except Exception as e:
-            print(f"❌ Error al crear PDF: {e}")
+            print(f"Error al crear PDF: {e}")
             import traceback
             traceback.print_exc()
             return None
@@ -275,9 +266,9 @@ class InformanteHTML(Informante):
 
 
     def generar_informe(self, departamento,admin_datos):
-        print(f"📄 Generando informe HTML para: {departamento}")
+        print(f"Generando informe HTML para: {departamento}")
 
-        # 1. Generar gráficos (Formato SVG para HTML para mejor calidad)
+        # Generar gráficos (Formato SVG para HTML para mejor calidad)
         try:
             self._graficador_torta.graficar(
                 admin_datos, 
@@ -291,27 +282,24 @@ class InformanteHTML(Informante):
                 'default', 
                 'svg'
             )
-            print("✅ Gráficos SVG generados")
+            print(" Gráficos SVG generados")
         except Exception as e:
-            print(f"❌ Error al generar gráficos: {e}")
+            print(f" Error al generar gráficos: {e}")
             return None
 
-        # 2. Construir rutas (Igual que en InformantePDF)
+        # Construir rutas (Igual que en InformantePDF)
         ruta_base = os.path.abspath(os.path.dirname(__file__))
         ruta_diagramas = os.path.join(ruta_base, "..", "static", "diagramas")
         ruta_docs = os.path.join(ruta_base, "..", "static", "docs")
-        
-        # Asegurar que existe el directorio de documentos
+       
         os.makedirs(ruta_docs, exist_ok=True)
 
         # Nombre limpio para los archivos
         nombre_limpio = departamento.lower().replace(' ', '_')
 
-        # Rutas específicas de los gráficos generados
         ruta_diagrama = os.path.join(ruta_diagramas, f"diagrama_circular_{nombre_limpio}.svg")
         ruta_nube = os.path.join(ruta_diagramas, f"nube_palabras_{nombre_limpio}.svg")
 
-        # 3. Leer contenido de los SVG para incrustarlos
         torta_content = "<div>No se pudo cargar el diagrama circular</div>"
         nube_content = "<div>No se pudo cargar la nube de palabras</div>"
 
@@ -320,28 +308,26 @@ class InformanteHTML(Informante):
                 with open(ruta_diagrama, 'r', encoding='utf-8') as file:
                     torta_content = file.read()
             except Exception as e:
-                print(f"⚠️ Error leyendo diagrama circular: {e}")
+                print(f"Error leyendo diagrama circular: {e}")
         else:
-            print(f"⚠️ Archivo no encontrado: {ruta_diagrama}")
+            print(f"Archivo no encontrado: {ruta_diagrama}")
 
         if os.path.exists(ruta_nube):
             try:
                 with open(ruta_nube, 'r', encoding='utf-8') as file:
                     nube_content = file.read()
             except Exception as e:
-                print(f"⚠️ Error leyendo nube de palabras: {e}")
+                print(f"Error leyendo nube de palabras: {e}")
         else:
-            print(f"⚠️ Archivo no encontrado: {ruta_nube}")
+            print(f"Archivo no encontrado: {ruta_nube}")
 
         # 4. Obtener datos de reclamos
         reclamos = admin_datos.obtener_reclamos(departamento)
         
-        # Construir items de la lista
         items_html = ""
         for reclamo in reclamos:
             items_html += f"        <li class='list-group-item'>{reclamo.titulo} | <strong>{reclamo.estado}</strong></li>\n"
 
-        # 5. Construir el HTML completo
         fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
         
         html_template = f"""
@@ -386,7 +372,6 @@ class InformanteHTML(Informante):
 </body>
 </html>"""
 
-        # 6. Guardar y Retornar
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         nombre_archivo = f"Informe_{nombre_limpio}_{timestamp}.html"
         ruta_salida_html = os.path.join(ruta_docs, nombre_archivo)
@@ -395,8 +380,6 @@ class InformanteHTML(Informante):
             with open(ruta_salida_html, 'w', encoding='utf-8') as informe:
                 informe.write(html_template)
             
-            print(f"✅ Informe HTML guardado en: {ruta_salida_html}")
-
             return send_file(
                 ruta_salida_html, 
                 as_attachment=True,
@@ -404,5 +387,4 @@ class InformanteHTML(Informante):
                 mimetype='text/html'
             )
         except Exception as e:
-            print(f"❌ Error al guardar/enviar HTML: {e}")
             return None
